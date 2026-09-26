@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ps" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07100b"><title>SMC Binance Signal Bot</title>
+<style>
+body{margin:0;background:#07100b;color:#eaf7ee;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif}
+.wrap{max-width:720px;margin:auto;padding:16px}.card{background:#0d1711;border:1px solid #203127;border-radius:18px;padding:16px;margin:12px 0}
+h1{font-size:23px;margin:4px 0}.sub{color:#93aa9a;font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap}
+select,button{background:#132019;color:#fff;border:1px solid #304638;border-radius:12px;padding:11px 13px;font-size:15px}
+button{cursor:pointer}.status{padding:8px 12px;border-radius:20px;background:#17251c;color:#9ee0ae;display:inline-block}
+.signal{font-size:28px;font-weight:800;margin:8px 0}.buy{color:#42e887}.sell{color:#ff6978}.none{color:#a7b7ad}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#101d15;border-radius:12px;padding:12px}.metric b{display:block;font-size:17px;margin-top:4px}
+ul{margin:8px 0;padding-right:20px;line-height:1.9}.small{font-size:12px;color:#91a498}
+</style></head>
+<body><div class="wrap">
+<div class="card"><h1>🧠 SMC Binance Signal Bot</h1><div class="sub">Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR</div></div>
+<div class="card"><div class="row">
+<select id="symbol"><option>BTCUSDT</option><option>ETHUSDT</option><option>SOLUSDT</option><option>BNBUSDT</option></select>
+<select id="tf"><option value="1m">1 دقیقه</option><option value="5m" selected>5 دقیقې</option><option value="15m">15 دقیقې</option><option value="1h">1 ساعت</option></select>
+<button onclick="start()">▶ شروع</button><button onclick="stop()">■ بند</button></div>
+<p><span id="status" class="status">Disconnected</span></p>
+</div>
+<div class="card"><div id="signal" class="signal none">NO SIGNAL</div><div id="reason" class="small">د SMC تایید ته انتظار...</div></div>
+<div class="card grid">
+<div class="metric">Entry<b id="entry">—</b></div><div class="metric">Stop Loss<b id="sl">—</b></div>
+<div class="metric">TP1<b id="tp1">—</b></div><div class="metric">TP2<b id="tp2">—</b></div>
+<div class="metric">R:R<b id="rr">—</b></div><div class="metric">Confidence<b id="conf">—</b></div>
+</div>
+<div class="card"><b>تاییدونه</b><ul id="checks"><li>Waiting for candles...</li></ul></div>
+<div class="card small">AUTO TRADE: OFF — دا نسخه یوازې سیګنال ښيي. د حقیقي پیسو معامله نه کوي.</div>
+</div>
+<script>
+let ws=null, candles=[], running=false;
+const $=id=>document.getElementById(id);
+function ema(a,n){let k=2/(n+1),e=a[0];for(let i=1;i<a.length;i++)e=a[i]*k+e*(1-k);return e}
+function rsi(a,n=14){if(a.length<n+1)return 50;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];g+=Math.max(d,0);l+=Math.max(-d,0)}return l===0?100:100-100/(1+g/l)}
+function atr(c,n=14){if(c.length<n+1)return 0;let s=0;for(let i=c.length-n;i<c.length;i++)s+=Math.max(c[i].h-c[i].l,Math.abs(c[i].h-c[i-1].c),Math.abs(c[i].l-c[i-1].c));return s/n}
+function fmt(x){return Number(x).toLocaleString(undefined,{maximumFractionDigits:8})}
+function analyze(){
+ if(candles.length<60)return;
+ let c=candles, a=c.map(x=>x.c), last=c[c.length-1], e50=ema(a,50),e200=ema(a,Math.min(200,a.length)),rs=rsi(a),at=atr(c);
+ let recent=c.slice(-12), highs=recent.slice(0,-2).map(x=>x.h), lows=recent.slice(0,-2).map(x=>x.l);
+ let sh=Math.max(...highs), sl=Math.min(...lows), grabUp=last.h>sh&&last.c<sh, grabDn=last.l<sl&&last.c>sl;
+ let p=c[c.length-2], pp=c[c.length-3];
+ let bullBos=last.c>p.h && p.h>pp.h, bearBos=last.c<p.l && p.l<pp.l;
+ let bullFvg=c.length>=4 && c[c.length-3].h<c[c.length-1].l, bearFvg=c.length>=4 && c[c.length-3].l>c[c.length-1].h;
+ let buyScore=(grabDn?2:0)+(bullBos?1:0)+(bullFvg?2:0)+(e50>e200?1:0)+(rs>50?1:0);
+ let sellScore=(grabUp?2:0)+(bearBos?1:0)+(bearFvg?2:0)+(e50<e200?1:0)+(rs<50?1:0);
+ let checks=`<li>Liquidity Grab: ${grabDn||grabUp?'✅':'❌'}</li><li>BOS: ${bullBos||bearBos?'✅':'❌'}</li><li>FVG: ${bullFvg||bearFvg?'✅':'❌'}</li><li>EMA 50/200: ${e50>e200?'Bullish 🟢':'Bearish 🔴'}</li><li>RSI 14: ${rs.toFixed(1)}</li><li>ATR 14: ${fmt(at)}</li>`;$('checks').innerHTML=checks;
+ let side=buyScore>=6?'BUY':sellScore>=6?'SELL':null;
+ if(!side){$('signal').textContent='NO SIGNAL';$('signal').className='signal none';$('reason').textContent='ټول SMC تاییدونه لا نه دي بشپړ شوي.';return}
+ let entry=last.c, risk=Math.max(at*1.2,entry*0.001);
+ let stop=side==='BUY'?entry-risk:entry+risk,tp1=side==='BUY'?entry+risk*1.5:entry-risk*1.5,tp2=side==='BUY'?entry+risk*2:entry-risk*2;
+ $('signal').textContent=(side==='BUY'?'🟢 BUY':'🔴 SELL')+' — SMC SIGNAL';$('signal').className='signal '+(side==='BUY'?'buy':'sell');
+ $('reason').textContent='Liquidity + Structure + FVG + Indicator confirmation';
+ $('entry').textContent=fmt(entry);$('sl').textContent=fmt(stop);$('tp1').textContent=fmt(tp1);$('tp2').textContent=fmt(tp2);$('rr').textContent='1 : 1.5 / 1 : 2';$('conf').textContent=Math.round(Math.max(buyScore,sellScore)/7*100)+'%';
+}
+function start(){stop();running=true;let sym=$('symbol').value.toLowerCase(),tf=$('tf').value;let url=`wss://stream.binance.com:9443/ws/${sym}@kline_${tf}`;ws=new WebSocket(url);ws.onopen=()=>{$('status').textContent='🟢 Binance Live';};ws.onclose=()=>{$('status').textContent='⚪ Disconnected';};ws.onerror=()=>{$('status').textContent='🔴 Connection error';};ws.onmessage=e=>{let d=JSON.parse(e.data),k=d.k;if(k.x){candles.push({o:+k.o,h:+k.h,l:+k.l,c:+k.c,v:+k.v});if(candles.length>250)candles.shift();analyze()}}}
+function stop(){if(ws){ws.close();ws=null}running=false}
+start();
+</script></body></html>
