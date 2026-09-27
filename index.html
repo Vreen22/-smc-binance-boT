@@ -2,190 +2,293 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <meta name="theme-color" content="#07100b">
-<title>SMC Binance Signal Bot V2</title>
+
+<title>SMC Binance Signal Bot V3</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box;
+}
 
 body{
- margin:0;
- background:#07100b;
- color:#eaf7ee;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+margin:0;
+background:#07100b;
+color:#eaf7ee;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 .wrap{
- max-width:900px;
- margin:auto;
- padding:12px
+max-width:900px;
+margin:auto;
+padding:12px;
 }
 
 .card{
- background:#0d1711;
- border:1px solid #203127;
- border-radius:18px;
- padding:14px;
- margin:10px 0
+background:#0d1711;
+border:1px solid #203127;
+border-radius:18px;
+padding:14px;
+margin:10px 0;
 }
 
-h1{font-size:22px;margin:2px 0 5px}
+h1{
+font-size:23px;
+margin:2px 0 5px;
+}
 
 .sub{
- color:#91a99a;
- font-size:12px
+color:#91a99a;
+font-size:13px;
 }
 
 .row{
- display:flex;
- gap:8px;
- flex-wrap:wrap
+display:flex;
+gap:8px;
+flex-wrap:wrap;
 }
 
-select,button{
- background:#132019;
- color:#fff;
- border:1px solid #304638;
- border-radius:12px;
- padding:11px 13px;
- font-size:15px
+select,
+button{
+background:#132019;
+color:#fff;
+border:1px solid #304638;
+border-radius:12px;
+padding:11px 13px;
+font-size:15px;
 }
 
-button{cursor:pointer}
+button{
+cursor:pointer;
+}
 
 .status{
- padding:8px 12px;
- border-radius:20px;
- background:#17251c;
- color:#9ee0ae;
- display:inline-block
+display:inline-block;
+padding:8px 12px;
+border-radius:20px;
+background:#17251c;
+color:#9ee0ae;
 }
 
 .signal{
- font-size:28px;
- font-weight:800
+font-size:28px;
+font-weight:800;
+margin:4px 0;
 }
 
-.buy{color:#42e887}
-.sell{color:#ff6978}
-.none{color:#a7b7ad}
+.buy{
+color:#42e887;
+}
+
+.sell{
+color:#ff6978;
+}
+
+.none{
+color:#a7b7ad;
+}
 
 .grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:8px
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
 }
 
 .metric{
- background:#101d15;
- border-radius:12px;
- padding:11px
+background:#101d15;
+border-radius:12px;
+padding:12px;
 }
 
 .metric span{
- display:block;
- color:#94a99c;
- font-size:12px
+display:block;
+font-size:12px;
+color:#94a99c;
 }
 
 .metric b{
- display:block;
- font-size:17px;
- margin-top:4px
+display:block;
+font-size:17px;
+margin-top:5px;
 }
 
 .chartbox{
- position:relative;
- background:#08110c;
- border:1px solid #1b2b21;
- border-radius:14px;
- overflow:hidden
+background:#08110c;
+border:1px solid #1b2b21;
+border-radius:14px;
+overflow:hidden;
 }
 
 canvas{
- display:block;
- width:100%;
- height:420px
+display:block;
+width:100%;
+height:420px;
 }
 
 .legend{
- display:flex;
- gap:12px;
- flex-wrap:wrap;
- font-size:12px;
- color:#a8b8ad;
- margin-top:8px
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:9px;
 }
 
 .badge{
- padding:5px 8px;
- border-radius:8px;
- background:#132019
-}
-
-ul{
- margin:8px 0;
- padding-left:20px;
- line-height:1.75
+padding:6px 10px;
+background:#132019;
+border-radius:9px;
+font-size:12px;
 }
 
 .small{
- font-size:12px;
- color:#91a498
+font-size:12px;
+color:#91a498;
+}
+
+.good{
+color:#42e887;
+}
+
+.bad{
+color:#ff6978;
+}
+
+.warning{
+color:#ffd66b;
+}
+
+.info{
+color:#73a9ff;
+}
+
+ul{
+margin:8px 0;
+padding-left:21px;
+line-height:1.8;
+}
+
+.score{
+font-size:18px;
+font-weight:700;
 }
 
 @media(max-width:600px){
- .grid{grid-template-columns:1fr 1fr}
- canvas{height:340px}
+
+.grid{
+grid-template-columns:1fr 1fr;
 }
+
+canvas{
+height:340px;
+}
+
+.signal{
+font-size:24px;
+}
+
+}
+
 </style>
 </head>
+
 
 <body>
 
 <div class="wrap">
 
+
+<!-- HEADER -->
+
 <div class="card">
-<h1>🧠 SMC Binance Signal Bot V2</h1>
+
+<h1>
+🧠 SMC Binance Signal Bot V3
+</h1>
 
 <div class="sub">
-Live Candles • Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR
-</div>
+Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR
 </div>
 
+</div>
+
+
+<!-- CONTROL -->
 
 <div class="card">
 
 <div class="row">
 
 <select id="symbol">
-<option>BTCUSDT</option>
-<option>ETHUSDT</option>
-<option>SOLUSDT</option>
-<option>BNBUSDT</option>
+
+<option value="BTCUSDT">
+BTCUSDT
+</option>
+
+<option value="ETHUSDT">
+ETHUSDT
+</option>
+
+<option value="SOLUSDT">
+SOLUSDT
+</option>
+
+<option value="BNBUSDT">
+BNBUSDT
+</option>
+
 </select>
+
 
 <select id="tf">
-<option value="1m">1 Min</option>
-<option value="5m" selected>5 Min</option>
-<option value="15m">15 Min</option>
-<option value="1h">1 Hour</option>
+
+<option value="1m">
+1 Min
+</option>
+
+<option value="5m" selected>
+5 Min
+</option>
+
+<option value="15m">
+15 Min
+</option>
+
+<option value="1h">
+1 Hour
+</option>
+
 </select>
 
-<button onclick="start()">▶ Start</button>
 
-<button onclick="stop()">■ Stop</button>
+<button onclick="start()">
+▶ Start
+</button>
+
+
+<button onclick="stop()">
+■ Stop
+</button>
 
 </div>
 
+
 <p>
-<span id="status" class="status">
+
+<span id="status"
+class="status">
+
 Disconnected
+
 </span>
+
 </p>
 
 </div>
+
 
 
 <!-- CHART -->
@@ -198,78 +301,152 @@ Disconnected
 
 </div>
 
+
 <div class="legend">
 
-<span class="badge">🟢 BUY</span>
+<span class="badge">
+🟢 BUY
+</span>
 
-<span class="badge">🔴 SELL</span>
+<span class="badge">
+🔴 SELL
+</span>
 
-<span class="badge">🔵 FVG</span>
+<span class="badge">
+🔵 FVG
+</span>
 
-<span class="badge">🟡 Liquidity</span>
+<span class="badge">
+🟡 Liquidity
+</span>
+
+<span class="badge">
+⚪ BOS
+</span>
 
 </div>
 
 </div>
+
 
 
 <!-- SIGNAL -->
 
 <div class="card">
 
-<div id="signal" class="signal none">
+<div id="signal"
+class="signal none">
+
 NO SIGNAL
-</div>
-
-<div id="reason" class="small">
-Waiting for complete SMC setup...
-</div>
 
 </div>
 
 
-<!-- ENTRY / SL / TP -->
+<div id="reason"
+class="small">
+
+Waiting for complete SMC confirmation...
+
+</div>
+
+</div>
+
+
+
+<!-- TRADE LEVELS -->
 
 <div class="card grid">
 
-<div class="metric">
-<span>Entry</span>
-<b id="entry">—</b>
-</div>
 
 <div class="metric">
-<span>Stop Loss</span>
-<b id="sl">—</b>
+
+<span>
+Entry
+</span>
+
+<b id="entry">
+—
+</b>
+
 </div>
+
 
 <div class="metric">
-<span>TP1</span>
-<b id="tp1">—</b>
+
+<span>
+Stop Loss
+</span>
+
+<b id="sl">
+—
+</b>
+
 </div>
+
 
 <div class="metric">
-<span>TP2</span>
-<b id="tp2">—</b>
+
+<span>
+TP1
+</span>
+
+<b id="tp1">
+—
+</b>
+
 </div>
+
 
 <div class="metric">
-<span>R:R</span>
-<b id="rr">—</b>
+
+<span>
+TP2
+</span>
+
+<b id="tp2">
+—
+</b>
+
 </div>
+
 
 <div class="metric">
-<span>Confidence</span>
-<b id="conf">—</b>
+
+<span>
+R:R
+</span>
+
+<b id="rr">
+—
+</b>
+
+</div>
+
+
+<div class="metric">
+
+<span>
+SMC Score
+</span>
+
+<b id="conf">
+—
+</b>
+
 </div>
 
 </div>
+
 
 
 <!-- CONFIRMATIONS -->
 
 <div class="card">
 
-<b>SMC Confirmations</b>
+<b>
+SMC Confirmations
+</b>
+
 
 <ul id="checks">
 
@@ -282,128 +459,299 @@ Waiting for market history...
 </div>
 
 
+
+<!-- MARKET DATA -->
+
+<div class="card">
+
+<div class="grid">
+
+<div class="metric">
+
+<span>
+EMA 50
+</span>
+
+<b id="ema50">
+—
+</b>
+
+</div>
+
+
+<div class="metric">
+
+<span>
+EMA 200
+</span>
+
+<b id="ema200">
+—
+</b>
+
+</div>
+
+
+<div class="metric">
+
+<span>
+RSI 14
+</span>
+
+<b id="rsi">
+—
+</b>
+
+</div>
+
+
+<div class="metric">
+
+<span>
+ATR 14
+</span>
+
+<b id="atr">
+—
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+
 <div class="card small">
 
-AUTO TRADE: OFF — Signal-only.
-No API key and no real-money orders.
+AUTO TRADE: OFF
+
+<br><br>
+
+Signal-only version.
+No API key.
+No real-money orders.
+
+<br><br>
+
+SMC Score is a rule-based confirmation score,
+not a guaranteed probability of profit.
 
 </div>
 
+
 </div>
+
 
 
 <script>
+
+
+/* =====================================================
+GLOBAL VARIABLES
+===================================================== */
 
 let ws=null;
 
 let candles=[];
 
-let signal=null;
-
 let markers=[];
 
-
-const $=id=>
-document.getElementById(id);
+let signal=null;
 
 
 
-/* =========================
+/* =====================================================
+HELPER
+===================================================== */
+
+function $(id){
+
+return document.getElementById(id);
+
+}
+
+
+/* =====================================================
 EMA
-========================= */
+===================================================== */
 
-function ema(a,n){
+function ema(values,period){
 
-if(!a.length)
+if(!values.length){
+
 return 0;
 
-n=Math.min(n,a.length);
-
-const k=2/(n+1);
-
-let e=a[0];
-
-for(let i=1;i<a.length;i++){
-
-e=a[i]*k+e*(1-k);
-
-}
-
-return e;
-
 }
 
 
+period=Math.min(
+period,
+values.length
+);
 
-/* =========================
+
+const multiplier=
+2/(period+1);
+
+
+let result=
+values[0];
+
+
+for(
+let i=1;
+i<values.length;
+i++
+){
+
+result=
+values[i]*
+multiplier+
+result*
+(1-multiplier);
+
+}
+
+
+return result;
+
+}
+
+
+
+/* =====================================================
 RSI
-========================= */
+===================================================== */
 
-function rsi(a,n=14){
+function rsi(values,period=14){
 
-if(a.length<n+1)
+if(
+values.length<
+period+1
+){
+
 return 50;
+
+}
+
 
 let gain=0;
 
 let loss=0;
 
-for(let i=a.length-n;i<a.length;i++){
 
-let d=a[i]-a[i-1];
+for(
+let i=values.length-period;
+i<values.length;
+i++
+){
 
-gain+=Math.max(d,0);
+const change=
+values[i]-
+values[i-1];
 
-loss+=Math.max(-d,0);
+
+if(change>0){
+
+gain+=change;
 
 }
 
-return loss===0
-?100
-:100-(100/(1+gain/loss));
+else{
+
+loss+=Math.abs(change);
+
+}
+
+}
+
+
+if(loss===0){
+
+return 100;
+
+}
+
+
+const rs=
+gain/loss;
+
+
+return 100-
+(100/(1+rs));
 
 }
 
 
 
-/* =========================
+/* =====================================================
 ATR
-========================= */
+===================================================== */
 
-function atr(c,n=14){
+function atr(data,period=14){
 
-if(c.length<n+1)
+if(
+data.length<
+period+1
+){
+
 return 0;
+
+}
+
 
 let total=0;
 
-for(let i=c.length-n;i<c.length;i++){
 
-total+=Math.max(
+for(
+let i=data.length-period;
+i<data.length;
+i++
+){
 
-c[i].h-c[i].l,
+const current=
+data[i];
 
-Math.abs(c[i].h-c[i-1].c),
+const previous=
+data[i-1];
 
-Math.abs(c[i].l-c[i-1].c)
+
+const tr=Math.max(
+
+current.h-current.l,
+
+Math.abs(
+current.h-previous.c
+),
+
+Math.abs(
+current.l-previous.c
+)
 
 );
 
+
+total+=tr;
+
 }
 
-return total/n;
+
+return total/period;
 
 }
 
 
 
-/* =========================
-FORMAT
-========================= */
+/* =====================================================
+PRICE FORMAT
+===================================================== */
 
-function fmt(x){
+function fmt(value){
 
-return Number(x).toLocaleString(
+return Number(value)
+.toLocaleString(
 undefined,
 {
 maximumFractionDigits:8
@@ -414,72 +762,109 @@ maximumFractionDigits:8
 
 
 
-/* =========================
-SWINGS
-========================= */
+/* =====================================================
+FIND SWINGS
+===================================================== */
 
-function findSwings(c,look=2){
+function findSwings(data,look=2){
 
-let highs=[];
+const highs=[];
 
-let lows=[];
+const lows=[];
+
 
 for(
 let i=look;
-i<c.length-look;
+i<data.length-look;
 i++
 ){
 
-let hi=true;
+let isHigh=true;
 
-let lo=true;
+let isLow=true;
 
-for(let j=1;j<=look;j++){
+
+for(
+let j=1;
+j<=look;
+j++
+){
 
 if(
-c[i].h<=c[i-j].h ||
-c[i].h<c[i+j].h
-)
-hi=false;
+data[i].h<=data[i-j].h ||
+data[i].h<data[i+j].h
+){
 
-if(
-c[i].l>=c[i-j].l ||
-c[i].l>c[i+j].l
-)
-lo=false;
+isHigh=false;
 
 }
 
-if(hi)
+
+if(
+data[i].l>=data[i-j].l ||
+data[i].l>data[i+j].l
+){
+
+isLow=false;
+
+}
+
+}
+
+
+if(isHigh){
+
 highs.push({
-i,
-p:c[i].h
-});
 
-if(lo)
-lows.push({
-i,
-p:c[i].l
+i:i,
+
+p:data[i].h
+
 });
 
 }
 
-return {
+
+if(isLow){
+
+lows.push({
+
+i:i,
+
+p:data[i].l
+
+});
+
+}
+
+}
+
+
+return{
+
 highs,
+
 lows
+
 };
 
 }
 
 
 
-/* =========================
-SMC ANALYSIS
-========================= */
+/* =====================================================
+MAIN SMC ANALYSIS
+===================================================== */
 
 function analyze(){
 
-if(candles.length<80){
+
+/* Need enough history */
+
+if(
+candles.length<
+80
+){
 
 $("reason").textContent=
 "Loading candles: "+
@@ -493,129 +878,233 @@ return;
 }
 
 
-const c=candles;
-
-const n=c.length;
-
-const close=c.map(x=>x.c);
-
-const last=c[n-1];
+const data=
+candles;
 
 
-const E50=
-ema(close,50);
+const n=
+data.length;
 
-const E200=
-ema(close,200);
+
+const closes=
+data.map(
+c=>c.c
+);
+
+
+const last=
+data[n-1];
+
+
+/* =====================================================
+INDICATORS
+===================================================== */
+
+const EMA50=
+ema(
+closes,
+50
+);
+
+
+const EMA200=
+ema(
+closes,
+200
+);
+
 
 const RSI=
-rsi(close,14);
+rsi(
+closes,
+14
+);
+
 
 const ATR=
-atr(c,14);
+atr(
+data,
+14
+);
+
+
+/* =====================================================
+DISPLAY INDICATORS
+===================================================== */
+
+$("ema50").textContent=
+fmt(EMA50);
+
+$("ema200").textContent=
+fmt(EMA200);
+
+$("rsi").textContent=
+RSI.toFixed(2);
+
+$("atr").textContent=
+fmt(ATR);
 
 
 
-/* SWINGS */
+/* =====================================================
+TREND
+===================================================== */
 
-const sliced=
-c.slice(-70);
+const bullishTrend=
+EMA50>
+EMA200;
 
-const sw=
-findSwings(sliced,2);
+
+const bearishTrend=
+EMA50<
+EMA200;
+
+
+
+/* =====================================================
+SWING STRUCTURE
+===================================================== */
+
+const recent=
+data.slice(-80);
+
+
+const swing=
+findSwings(
+recent,
+2
+);
 
 
 const highs=
-sw.highs.map(x=>({
+swing.highs.map(
+x=>({
 
 ...x,
 
-i:x.i+(n-70)
+i:
+x.i+
+(n-80)
 
-}));
+})
+);
 
 
 const lows=
-sw.lows.map(x=>({
+swing.lows.map(
+x=>({
 
 ...x,
 
-i:x.i+(n-70)
+i:
+x.i+
+(n-80)
 
-}));
+})
+);
 
 
 const lastHigh=
 highs.at(-1);
 
-const prevHigh=
+
+const previousHigh=
 highs.at(-2);
+
 
 const lastLow=
 lows.at(-1);
 
-const prevLow=
+
+const previousLow=
 lows.at(-2);
 
 
 
-/* =========================
+/* =====================================================
 BOS
-========================= */
+===================================================== */
 
-let bullBOS=false;
+let bullishBOS=false;
 
-let bearBOS=false;
-
-let bullCHOCH=false;
-
-let bearCHOCH=false;
+let bearishBOS=false;
 
 
-if(lastHigh)
-bullBOS=
-last.c>lastHigh.p;
+if(lastHigh){
 
-
-if(lastLow)
-bearBOS=
-last.c<lastLow.p;
-
-
-if(
-prevLow &&
-lastHigh
-){
-
-bullCHOCH=
-last.c>lastHigh.p &&
-prevLow.i>
-(prevHigh?.i ?? -1);
+bullishBOS=
+last.c>
+lastHigh.p;
 
 }
 
 
-if(
-prevHigh &&
-lastLow
-){
+if(lastLow){
 
-bearCHOCH=
-last.c<lastLow.p &&
-prevHigh.i>
-(prevLow?.i ?? -1);
+bearishBOS=
+last.c<
+lastLow.p;
 
 }
 
 
 
-/* =========================
+/* =====================================================
+CHOCH
+===================================================== */
+
+let bullishCHOCH=false;
+
+let bearishCHOCH=false;
+
+
+if(
+lastHigh &&
+previousLow
+){
+
+bullishCHOCH=
+last.c>
+lastHigh.p;
+
+}
+
+
+if(
+lastLow &&
+previousHigh
+){
+
+bearishCHOCH=
+last.c<
+lastLow.p;
+
+}
+
+
+
+/* =====================================================
+STRUCTURE CONFIRMATION
+===================================================== */
+
+const bullishStructure=
+bullishBOS||
+bullishCHOCH;
+
+
+const bearishStructure=
+bearishBOS||
+bearishCHOCH;
+
+
+
+/* =====================================================
 FVG
-========================= */
+===================================================== */
 
-let bullFVG=null;
+let bullishFVG=null;
 
-let bearFVG=null;
+let bearishFVG=null;
 
 
 for(
@@ -626,16 +1115,17 @@ i++
 
 if(
 i>=2 &&
-c[i-2].h<c[i].l
+data[i-2].h<
+data[i].l
 ){
 
-bullFVG={
+bullishFVG={
 
-i,
+i:i,
 
-low:c[i-2].h,
+low:data[i-2].h,
 
-high:c[i].l
+high:data[i].l
 
 };
 
@@ -644,16 +1134,17 @@ high:c[i].l
 
 if(
 i>=2 &&
-c[i-2].l>c[i].h
+data[i-2].l>
+data[i].h
 ){
 
-bearFVG={
+bearishFVG={
 
-i,
+i:i,
 
-low:c[i].h,
+low:data[i].h,
 
-high:c[i-2].l
+high:data[i-2].l
 
 };
 
@@ -663,68 +1154,113 @@ high:c[i-2].l
 
 
 
-/* =========================
-LIQUIDITY
-========================= */
+/* =====================================================
+RECENT FVG
+===================================================== */
+
+const recentBullFVG=
+bullishFVG &&
+bullishFVG.i>=n-10;
+
+
+const recentBearFVG=
+bearishFVG &&
+bearishFVG.i>=n-10;
+
+
+
+/* =====================================================
+LIQUIDITY GRAB
+===================================================== */
 
 let liquidityUp=null;
 
 let liquidityDown=null;
 
 
-const lookStart=
-Math.max(5,n-25);
+const startIndex=
+Math.max(
+5,
+n-30
+);
 
 
 for(
-let i=lookStart;
+let i=startIndex;
 i<n-1;
 i++
 ){
 
-const beforeHigh=
-Math.max(
-...c
-.slice(
+
+const previousCandles=
+data.slice(
 Math.max(0,i-8),
 i
-)
-.map(x=>x.h)
-);
-
-
-const beforeLow=
-Math.min(
-...c
-.slice(
-Math.max(0,i-8),
-i
-)
-.map(x=>x.l)
 );
 
 
 if(
-c[i].h>beforeHigh &&
-c[i].c<beforeHigh
+!previousCandles.length
+){
+
+continue;
+
+}
+
+
+const previousHigh=
+Math.max(
+...previousCandles.map(
+x=>x.h
+)
+);
+
+
+const previousLow=
+Math.min(
+...previousCandles.map(
+x=>x.l
+)
+);
+
+
+
+/* Buy-side liquidity sweep */
+
+if(
+data[i].h>
+previousHigh &&
+data[i].c<
+previousHigh
 ){
 
 liquidityUp={
-i,
-price:c[i].h
+
+i:i,
+
+price:data[i].h
+
 };
 
 }
 
 
+
+/* Sell-side liquidity sweep */
+
 if(
-c[i].l<beforeLow &&
-c[i].c>beforeLow
+data[i].l<
+previousLow &&
+data[i].c>
+previousLow
 ){
 
 liquidityDown={
-i,
-price:c[i].l
+
+i:i,
+
+price:data[i].l
+
 };
 
 }
@@ -733,255 +1269,456 @@ price:c[i].l
 
 
 
-/* RECENT LIQUIDITY */
+/* =====================================================
+RECENT LIQUIDITY
+===================================================== */
 
-const buyLiquidity=
+const recentBuySideLiquidity=
 liquidityDown &&
 liquidityDown.i>=n-12;
 
 
-const sellLiquidity=
+const recentSellSideLiquidity=
 liquidityUp &&
 liquidityUp.i>=n-12;
 
 
-const buyFVG=
-bullFVG &&
-bullFVG.i>=n-10;
+
+/* =====================================================
+BUY CONDITIONS
+===================================================== */
 
 
-const sellFVG=
-bearFVG &&
-bearFVG.i>=n-10;
+/*
+BUY requires:
+
+1 Liquidity Grab
+2 Bullish BOS or CHoCH
+3 Bullish FVG
+4 EMA50 > EMA200
+5 RSI > 50
+*/
+
+const buyLiquidity=
+recentBuySideLiquidity;
 
 
 const buyStructure=
-bullBOS ||
-bullCHOCH;
+bullishStructure;
+
+
+const buyFVG=
+recentBullFVG;
+
+
+const buyTrend=
+bullishTrend;
+
+
+const buyMomentum=
+RSI>50;
+
+
+const validBUY=
+
+buyLiquidity&&
+buyStructure&&
+buyFVG&&
+buyTrend&&
+buyMomentum;
+
+
+
+/* =====================================================
+SELL CONDITIONS
+===================================================== */
+
+
+/*
+SELL requires:
+
+1 Liquidity Grab
+2 Bearish BOS or CHoCH
+3 Bearish FVG
+4 EMA50 < EMA200
+5 RSI < 50
+*/
+
+const sellLiquidity=
+recentSellSideLiquidity;
 
 
 const sellStructure=
-bearBOS ||
-bearCHOCH;
+bearishStructure;
 
 
-const trendBull=
-E50>E200;
+const sellFVG=
+recentBearFVG;
 
 
-const trendBear=
-E50<E200;
+const sellTrend=
+bearishTrend;
 
 
-
-/* =========================
-SCORE
-========================= */
-
-let buyScore=
-
-(buyLiquidity?2:0)+
-
-(buyStructure?2:0)+
-
-(buyFVG?2:0)+
-
-(trendBull?1:0)+
-
-(RSI>50?1:0);
+const sellMomentum=
+RSI<50;
 
 
-let sellScore=
+const validSELL=
 
-(sellLiquidity?2:0)+
-
-(sellStructure?2:0)+
-
-(sellFVG?2:0)+
-
-(trendBear?1:0)+
-
-(RSI<50?1:0);
+sellLiquidity&&
+sellStructure&&
+sellFVG&&
+sellTrend&&
+sellMomentum;
 
 
 
-/* =========================
+/* =====================================================
 SIGNAL
-========================= */
+===================================================== */
 
 signal=null;
 
 
-if(buyScore>=7)
-signal="BUY";
+if(validBUY){
 
-else if(sellScore>=7)
-signal="SELL";
+signal=
+"BUY";
+
+}
+
+
+else if(validSELL){
+
+signal=
+"SELL";
+
+}
 
 
 
-/* =========================
-CONFIRMATIONS
-========================= */
+/* =====================================================
+SCORE
+===================================================== */
+
+let buyScore=0;
+
+let sellScore=0;
+
+
+if(buyLiquidity)
+buyScore+=2;
+
+if(buyStructure)
+buyScore+=2;
+
+if(buyFVG)
+buyScore+=2;
+
+if(buyTrend)
+buyScore+=1;
+
+if(buyMomentum)
+buyScore+=1;
+
+
+if(sellLiquidity)
+sellScore+=2;
+
+if(sellStructure)
+sellScore+=2;
+
+if(sellFVG)
+sellScore+=2;
+
+if(sellTrend)
+sellScore+=1;
+
+if(sellMomentum)
+sellScore+=1;
+
+
+
+/* =====================================================
+CONFIRMATIONS UI
+===================================================== */
 
 $("checks").innerHTML=`
 
 <li>
+
 Liquidity Grab:
+
 ${
-buyLiquidity ||
+buyLiquidity||
 sellLiquidity
-?"✅ Confirmed"
-:"❌ Not confirmed"
+
+?
+
+"✅ Confirmed"
+
+:
+
+"❌ Not confirmed"
+
 }
+
 </li>
 
+
 <li>
-Structure BOS/CHoCH:
+
+BOS / CHoCH:
+
 ${
-buyStructure ||
+buyStructure||
 sellStructure
-?"✅ Confirmed"
-:"❌ Not confirmed"
+
+?
+
+"✅ Confirmed"
+
+:
+
+"❌ Not confirmed"
+
 }
+
 </li>
 
+
 <li>
+
 FVG:
+
 ${
-buyFVG ||
+buyFVG||
 sellFVG
-?"✅ Confirmed"
-:"❌ Not confirmed"
+
+?
+
+"✅ Confirmed"
+
+:
+
+"❌ Not confirmed"
+
 }
+
 </li>
 
+
 <li>
+
 EMA 50/200:
+
 ${
-trendBull
-?"Bullish 🟢"
-:"Bearish 🔴"
+bullishTrend
+
+?
+
+"🟢 Bullish"
+
+:
+
+"🔴 Bearish"
+
 }
+
 </li>
 
+
 <li>
+
 RSI 14:
-${RSI.toFixed(1)}
+
+${RSI.toFixed(2)}
+
+${
+RSI>50
+
+?
+
+"🟢 Bullish momentum"
+
+:
+
+"🔴 Bearish momentum"
+
+}
+
 </li>
 
+
 <li>
+
 ATR 14:
+
 ${fmt(ATR)}
+
 </li>
 
 `;
 
 
 
-/* =========================
+/* =====================================================
 NO SIGNAL
-========================= */
+===================================================== */
 
 if(!signal){
 
 $("signal").textContent=
 "NO SIGNAL";
 
+
 $("signal").className=
 "signal none";
 
+
+if(bullishTrend){
+
 $("reason").textContent=
-"Waiting for Liquidity + Structure + FVG confirmation...";
+"Bullish trend — waiting for complete BUY SMC confirmation...";
 
+}
 
-[
-"entry",
-"sl",
-"tp1",
-"tp2",
-"rr",
-"conf"
-]
-.forEach(
-id=>
-$(id).textContent="—"
-);
+else{
+
+$("reason").textContent=
+"Bearish trend — waiting for complete SELL SMC confirmation...";
 
 }
 
 
-/* =========================
-SIGNAL FOUND
-========================= */
+$("entry").textContent="—";
+
+$("sl").textContent="—";
+
+$("tp1").textContent="—";
+
+$("tp2").textContent="—";
+
+$("rr").textContent="—";
+
+$("conf").textContent="—";
+
+}
+
+
+
+/* =====================================================
+VALID SIGNAL
+===================================================== */
 
 else{
+
 
 const entry=
 last.c;
 
 
+const minimumRisk=
+entry*
+0.001;
+
+
 const risk=
 Math.max(
 ATR*1.2,
-entry*0.001
+minimumRisk
 );
 
 
-const stop=
-signal==="BUY"
-?entry-risk
-:entry+risk;
+let stop;
+
+let tp1;
+
+let tp2;
 
 
-const tp1=
-signal==="BUY"
-?entry+risk*1.5
-:entry-risk*1.5;
+if(signal==="BUY"){
+
+stop=
+entry-risk;
+
+tp1=
+entry+
+risk*1.5;
+
+tp2=
+entry+
+risk*2;
+
+}
 
 
-const tp2=
-signal==="BUY"
-?entry+risk*2
-:entry-risk*2;
+else{
 
+stop=
+entry+
+risk;
+
+tp1=
+entry-
+risk*1.5;
+
+tp2=
+entry-
+risk*2;
+
+}
+
+
+
+/* =====================================================
+SIGNAL DISPLAY
+===================================================== */
+
+if(signal==="BUY"){
 
 $("signal").textContent=
-
-signal==="BUY"
-
-?"🟢 BUY — SMC SIGNAL"
-
-:"🔴 SELL — SMC SIGNAL";
+"🟢 BUY — SMC SIGNAL";
 
 
 $("signal").className=
-
-"signal "+
-(
-signal==="BUY"
-?"buy"
-:"sell"
-);
+"signal buy";
 
 
 $("reason").textContent=
+"Liquidity Grab + BOS/CHoCH + Bullish FVG + EMA Bullish + RSI Bullish";
 
-signal==="BUY"
+}
 
-?"Liquidity Grab + BOS/CHoCH + Bullish FVG + Trend"
+else{
 
-:"Liquidity Grab + BOS/CHoCH + Bearish FVG + Trend";
+$("signal").textContent=
+"🔴 SELL — SMC SIGNAL";
+
+
+$("signal").className=
+"signal sell";
+
+
+$("reason").textContent=
+"Liquidity Grab + BOS/CHoCH + Bearish FVG + EMA Bearish + RSI Bearish";
+
+}
+
 
 
 $("entry").textContent=
 fmt(entry);
 
+
 $("sl").textContent=
 fmt(stop);
 
+
 $("tp1").textContent=
 fmt(tp1);
+
 
 $("tp2").textContent=
 fmt(tp2);
@@ -991,64 +1728,125 @@ $("rr").textContent=
 "1 : 1.5 / 1 : 2";
 
 
-$("conf").textContent=
 
-Math.round(
-Math.max(
-buyScore,
-sellScore
-)/8*100
-)+"%";
+/*
+This is a confirmation score,
+NOT probability.
+*/
+
+const score=
+signal==="BUY"
+?
+buyScore
+:
+sellScore;
+
+
+$("conf").textContent=
+score+
+"/8";
 
 }
 
 
 
-/* MARKERS */
+/* =====================================================
+CHART MARKERS
+===================================================== */
 
 markers=[];
 
 
-if(bullFVG)
+
+/* Bullish FVG */
+
+if(bullishFVG){
+
 markers.push({
+
 type:"fvg",
-i:bullFVG.i,
-low:bullFVG.low,
-high:bullFVG.high
+
+i:bullishFVG.i,
+
+low:bullishFVG.low,
+
+high:bullishFVG.high
+
 });
 
+}
 
-if(bearFVG)
+
+
+/* Bearish FVG */
+
+if(bearishFVG){
+
 markers.push({
+
 type:"fvg",
-i:bearFVG.i,
-low:bearFVG.low,
-high:bearFVG.high
+
+i:bearishFVG.i,
+
+low:bearishFVG.low,
+
+high:bearishFVG.high
+
 });
 
+}
 
-if(liquidityUp)
+
+
+/* Liquidity */
+
+if(liquidityUp){
+
 markers.push({
+
 type:"liq",
+
 i:liquidityUp.i,
+
 p:liquidityUp.price
+
 });
 
+}
 
-if(liquidityDown)
+
+if(liquidityDown){
+
 markers.push({
+
 type:"liq",
+
 i:liquidityDown.i,
+
 p:liquidityDown.price
+
 });
 
+}
 
-if(signal)
+
+
+/* Signal */
+
+if(signal){
+
 markers.push({
-type:signal.toLowerCase(),
+
+type:
+signal.toLowerCase(),
+
 i:n-1,
+
 p:last.c
+
 });
+
+}
 
 
 draw();
@@ -1057,9 +1855,9 @@ draw();
 
 
 
-/* =========================
+/* =====================================================
 DRAW CHART
-========================= */
+===================================================== */
 
 function draw(){
 
@@ -1068,88 +1866,107 @@ $("chart");
 
 
 const dpr=
-window.devicePixelRatio||1;
+window.devicePixelRatio||
+1;
 
 
-const w=
+const width=
 canvas.clientWidth;
 
 
-const h=
+const height=
 canvas.clientHeight;
 
 
 canvas.width=
-w*dpr;
+width*dpr;
+
 
 canvas.height=
-h*dpr;
+height*dpr;
 
 
 const ctx=
 canvas.getContext("2d");
 
 
-ctx.scale(dpr,dpr);
+ctx.scale(
+dpr,
+dpr
+);
 
 
 ctx.clearRect(
 0,
 0,
-w,
-h
+width,
+height
 );
 
 
-if(!candles.length)
+if(!candles.length){
+
 return;
 
+}
 
-const data=
+
+const chartData=
 candles.slice(-80);
 
 
-const min=
+const minPrice=
 Math.min(
-...data.map(x=>x.l)
+...chartData.map(
+x=>x.l
+)
 );
 
 
-const max=
+const maxPrice=
 Math.max(
-...data.map(x=>x.h)
+...chartData.map(
+x=>x.h
+)
 );
 
 
-const pad=
-(max-min)*0.08||1;
+const padding=
+(maxPrice-minPrice)*
+0.08||
+1;
 
 
-const lo=
-min-pad;
+const low=
+minPrice-padding;
 
 
-const hi=
-max+pad;
+const high=
+maxPrice+padding;
 
 
-const xStep=
-w/data.length;
+const step=
+width/
+chartData.length;
 
 
-const body=
+const candleWidth=
 Math.max(
 2,
-xStep*0.58
+step*0.58
 );
 
 
-const y=
-p=>
-h-
+function y(price){
+
+return height-
 (
-(p-lo)/(hi-lo)
-)*h;
+(price-low)/
+(high-low)
+)*
+height;
+
+}
 
 
 
@@ -1158,17 +1975,19 @@ h-
 ctx.strokeStyle=
 "#16271d";
 
-ctx.lineWidth=1;
+ctx.lineWidth=
+1;
 
 
 for(
-let j=1;
-j<5;
-j++
+let i=1;
+i<5;
+i++
 ){
 
-let yy=
-h*j/5;
+const yy=
+height*i/5;
+
 
 ctx.beginPath();
 
@@ -1178,7 +1997,7 @@ yy
 );
 
 ctx.lineTo(
-w,
+width,
 yy
 );
 
@@ -1190,150 +2009,200 @@ ctx.stroke();
 
 /* CANDLES */
 
-data.forEach(
-(k,i)=>{
+chartData.forEach(
+(candle,index)=>{
 
 const x=
-i*xStep+
-xStep/2;
+index*step+
+step/2;
 
-const yo=
-y(k.o);
 
-const yc=
-y(k.c);
+const openY=
+y(candle.o);
 
-const yh=
-y(k.h);
+const closeY=
+y(candle.c);
 
-const yl=
-y(k.l);
+const highY=
+y(candle.h);
+
+const lowY=
+y(candle.l);
+
+
+const bullish=
+candle.c>=candle.o;
+
+
+const candleColor=
+bullish
+?
+"#42e887"
+:
+"#ff6978";
 
 
 ctx.strokeStyle=
-k.c>=k.o
-?"#42e887"
-:"#ff6978";
+candleColor;
 
 ctx.fillStyle=
-ctx.strokeStyle;
+candleColor;
 
+
+/* Wick */
 
 ctx.beginPath();
 
 ctx.moveTo(
 x,
-yh
+highY
 );
 
 ctx.lineTo(
 x,
-yl
+lowY
 );
 
 ctx.stroke();
 
 
+/* Body */
+
 const top=
 Math.min(
-yo,
-yc
+openY,
+closeY
 );
 
 
-const bh=
+const bodyHeight=
 Math.max(
 1,
-Math.abs(yc-yo)
+Math.abs(
+closeY-openY
+)
 );
 
 
 ctx.fillRect(
-x-body/2,
+
+x-candleWidth/2,
+
 top,
-body,
-bh
+
+candleWidth,
+
+bodyHeight
+
 );
 
 });
 
 
 
-/* MARKERS */
+/* =====================================================
+MARKERS
+===================================================== */
 
 markers.forEach(
-m=>{
+marker=>{
 
-let idx=
-m.i-
+
+const index=
+marker.i-
 (
 candles.length-
-data.length
+chartData.length
 );
 
 
 if(
-idx<0 ||
-idx>=data.length
-)
+index<0||
+index>=chartData.length
+){
+
 return;
+
+}
 
 
 const x=
-idx*xStep+
-xStep/2;
+index*step+
+step/2;
 
 
-if(m.type==="fvg"){
+
+/* FVG */
+
+if(
+marker.type==="fvg"
+){
 
 ctx.fillStyle=
 "rgba(70,140,255,.16)";
 
 ctx.strokeStyle=
-"rgba(115,169,255,.6)";
+"rgba(115,169,255,.7)";
 
 
-const yy=
-y(m.high);
+const top=
+y(marker.high);
 
 
-const hh=
-Math.max(
-2,
-y(m.low)-yy
-);
+const bottom=
+y(marker.low);
 
 
 ctx.fillRect(
-x-xStep*1.5,
-yy,
-xStep*3,
-hh
+
+x-step*1.5,
+
+top,
+
+step*3,
+
+Math.max(
+2,
+bottom-top
+)
+
 );
 
 
 ctx.strokeRect(
-x-xStep*1.5,
-yy,
-xStep*3,
-hh
+
+x-step*1.5,
+
+top,
+
+step*3,
+
+Math.max(
+2,
+bottom-top
+)
+
 );
 
 }
 
 
+
+/* Liquidity */
+
 else if(
-m.type==="liq"
+marker.type==="liq"
 ){
 
 ctx.fillStyle=
 "#ffd66b";
 
+
 ctx.beginPath();
 
 ctx.arc(
 x,
-y(m.p),
+y(marker.p),
 5,
 0,
 Math.PI*2
@@ -1344,18 +2213,24 @@ ctx.fill();
 }
 
 
+
+/* BUY / SELL */
+
 else{
 
 ctx.fillStyle=
-m.type==="buy"
-?"#42e887"
-:"#ff6978";
+marker.type==="buy"
+?
+"#42e887"
+:
+"#ff6978";
+
 
 ctx.beginPath();
 
 ctx.arc(
 x,
-y(m.p),
+y(marker.p),
 7,
 0,
 Math.PI*2
@@ -1368,8 +2243,11 @@ ctx.fill();
 });
 
 
+
+/* LAST PRICE */
+
 const last=
-data.at(-1);
+chartData.at(-1);
 
 
 ctx.fillStyle=
@@ -1377,6 +2255,7 @@ ctx.fillStyle=
 
 ctx.font=
 "12px sans-serif";
+
 
 ctx.fillText(
 fmt(last.c),
@@ -1388,9 +2267,9 @@ fmt(last.c),
 
 
 
-/* =========================
+/* =====================================================
 RESIZE
-========================= */
+===================================================== */
 
 window.addEventListener(
 "resize",
@@ -1399,13 +2278,15 @@ draw
 
 
 
-/* =========================
+/* =====================================================
 START
-========================= */
+===================================================== */
 
 async function start(){
 
+
 stop();
+
 
 candles=[];
 
@@ -1419,13 +2300,17 @@ $("tf").value;
 
 
 $("status").textContent=
-"🟡 Loading market history...";
+"🟡 Loading Binance history...";
 
 
 try{
 
 
-const r=
+/*
+Load 250 historical candles
+*/
+
+const response=
 await fetch(
 
 `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=250`
@@ -1433,20 +2318,32 @@ await fetch(
 );
 
 
-if(!r.ok)
+if(!response.ok){
+
 throw new Error(
-"REST error"
+"Binance REST API error"
 );
+
+}
 
 
 const data=
-await r.json();
+await response.json();
 
+
+
+/*
+Ignore current unfinished candle.
+*/
 
 candles=
 data
-.slice(0,-1)
-.map(k=>({
+.slice(
+0,
+-1
+)
+.map(
+k=>({
 
 o:+k[1],
 
@@ -1458,21 +2355,25 @@ c:+k[4],
 
 v:+k[5]
 
-}));
+})
+);
 
 
 analyze();
 
-
 }
 
-catch(e){
+catch(error){
+
+console.error(error);
+
 
 $("status").textContent=
 "🔴 History Load Error";
 
+
 $("reason").textContent=
-"Could not load Binance historical candles.";
+"Could not load Binance historical data.";
 
 return;
 
@@ -1480,14 +2381,20 @@ return;
 
 
 
-/* LIVE BINANCE */
+/* =====================================================
+BINANCE WEBSOCKET
+===================================================== */
+
+const stream=
+
+`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${timeframe}`;
+
 
 ws=
 new WebSocket(
-
-`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${timeframe}`
-
+stream
 );
+
 
 
 ws.onopen=()=>{
@@ -1500,6 +2407,7 @@ analyze();
 };
 
 
+
 ws.onclose=()=>{
 
 $("status").textContent=
@@ -1508,21 +2416,33 @@ $("status").textContent=
 };
 
 
+
 ws.onerror=()=>{
 
 $("status").textContent=
-"🔴 Connection Error";
+"🔴 Binance Connection Error";
 
 };
 
 
-ws.onmessage=e=>{
+
+ws.onmessage=
+event=>{
+
+
+const message=
+JSON.parse(
+event.data
+);
+
 
 const k=
-JSON.parse(e.data).k;
+message.k;
 
 
-/* CLOSED CANDLE ONLY */
+/*
+Only process CLOSED candles.
+*/
 
 if(k.x){
 
@@ -1541,8 +2461,14 @@ v:+k.v
 });
 
 
-if(candles.length>250)
+if(
+candles.length>
+250
+){
+
 candles.shift();
+
+}
 
 
 analyze();
@@ -1555,9 +2481,9 @@ analyze();
 
 
 
-/* =========================
+/* =====================================================
 STOP
-========================= */
+===================================================== */
 
 function stop(){
 
@@ -1569,6 +2495,7 @@ ws=null;
 
 }
 
+
 $("status").textContent=
 "⚪ Disconnected";
 
@@ -1576,7 +2503,9 @@ $("status").textContent=
 
 
 
-/* AUTO START */
+/* =====================================================
+AUTO START
+===================================================== */
 
 start();
 
