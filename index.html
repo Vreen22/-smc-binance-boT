@@ -1,115 +1,143 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07100b">
-<title>SMC Binance Signal Bot</title>
+<title>SMC Binance Signal Bot V2</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
-margin:0;
-background:#07100b;
-color:#eaf7ee;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+ margin:0;
+ background:#07100b;
+ color:#eaf7ee;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 }
 
 .wrap{
-max-width:720px;
-margin:auto;
-padding:16px
+ max-width:900px;
+ margin:auto;
+ padding:12px
 }
 
 .card{
-background:#0d1711;
-border:1px solid #203127;
-border-radius:18px;
-padding:16px;
-margin:12px 0
+ background:#0d1711;
+ border:1px solid #203127;
+ border-radius:18px;
+ padding:14px;
+ margin:10px 0
 }
 
-h1{
-font-size:23px;
-margin:4px 0
-}
+h1{font-size:22px;margin:2px 0 5px}
 
 .sub{
-color:#93aa9a;
-font-size:13px
+ color:#91a99a;
+ font-size:12px
 }
 
 .row{
-display:flex;
-gap:8px;
-flex-wrap:wrap
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap
 }
 
 select,button{
-background:#132019;
-color:#fff;
-border:1px solid #304638;
-border-radius:12px;
-padding:11px 13px;
-font-size:15px
+ background:#132019;
+ color:#fff;
+ border:1px solid #304638;
+ border-radius:12px;
+ padding:11px 13px;
+ font-size:15px
 }
 
-button{
-cursor:pointer
-}
+button{cursor:pointer}
 
 .status{
-padding:8px 12px;
-border-radius:20px;
-background:#17251c;
-color:#9ee0ae;
-display:inline-block
+ padding:8px 12px;
+ border-radius:20px;
+ background:#17251c;
+ color:#9ee0ae;
+ display:inline-block
 }
 
 .signal{
-font-size:28px;
-font-weight:800;
-margin:8px 0
+ font-size:28px;
+ font-weight:800
 }
 
-.buy{
-color:#42e887
-}
-
-.sell{
-color:#ff6978
-}
-
-.none{
-color:#a7b7ad
-}
+.buy{color:#42e887}
+.sell{color:#ff6978}
+.none{color:#a7b7ad}
 
 .grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px
 }
 
 .metric{
-background:#101d15;
-border-radius:12px;
-padding:12px
+ background:#101d15;
+ border-radius:12px;
+ padding:11px
+}
+
+.metric span{
+ display:block;
+ color:#94a99c;
+ font-size:12px
 }
 
 .metric b{
-display:block;
-font-size:17px;
-margin-top:4px
+ display:block;
+ font-size:17px;
+ margin-top:4px
+}
+
+.chartbox{
+ position:relative;
+ background:#08110c;
+ border:1px solid #1b2b21;
+ border-radius:14px;
+ overflow:hidden
+}
+
+canvas{
+ display:block;
+ width:100%;
+ height:420px
+}
+
+.legend{
+ display:flex;
+ gap:12px;
+ flex-wrap:wrap;
+ font-size:12px;
+ color:#a8b8ad;
+ margin-top:8px
+}
+
+.badge{
+ padding:5px 8px;
+ border-radius:8px;
+ background:#132019
 }
 
 ul{
-margin:8px 0;
-padding-left:20px;
-line-height:1.9
+ margin:8px 0;
+ padding-left:20px;
+ line-height:1.75
 }
 
 .small{
-font-size:12px;
-color:#91a498
+ font-size:12px;
+ color:#91a498
+}
+
+@media(max-width:600px){
+ .grid{grid-template-columns:1fr 1fr}
+ canvas{height:340px}
 }
 </style>
 </head>
@@ -119,13 +147,11 @@ color:#91a498
 <div class="wrap">
 
 <div class="card">
-
-<h1>🧠 SMC Binance Signal Bot</h1>
+<h1>🧠 SMC Binance Signal Bot V2</h1>
 
 <div class="sub">
-Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR
+Live Candles • Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR
 </div>
-
 </div>
 
 
@@ -134,158 +160,116 @@ Liquidity • BOS • CHoCH • FVG • EMA • RSI • ATR
 <div class="row">
 
 <select id="symbol">
-
 <option>BTCUSDT</option>
-
 <option>ETHUSDT</option>
-
 <option>SOLUSDT</option>
-
 <option>BNBUSDT</option>
-
 </select>
-
 
 <select id="tf">
-
-<option value="1m">
-1 Min
-</option>
-
-<option value="5m" selected>
-5 Min
-</option>
-
-<option value="15m">
-15 Min
-</option>
-
-<option value="1h">
-1 Hour
-</option>
-
+<option value="1m">1 Min</option>
+<option value="5m" selected>5 Min</option>
+<option value="15m">15 Min</option>
+<option value="1h">1 Hour</option>
 </select>
 
+<button onclick="start()">▶ Start</button>
 
-<button onclick="start()">
-▶ Start
-</button>
-
-
-<button onclick="stop()">
-■ Stop
-</button>
+<button onclick="stop()">■ Stop</button>
 
 </div>
 
-
 <p>
-
 <span id="status" class="status">
 Disconnected
 </span>
-
 </p>
 
 </div>
 
 
+<!-- CHART -->
+
+<div class="card">
+
+<div class="chartbox">
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<div class="legend">
+
+<span class="badge">🟢 BUY</span>
+
+<span class="badge">🔴 SELL</span>
+
+<span class="badge">🔵 FVG</span>
+
+<span class="badge">🟡 Liquidity</span>
+
+</div>
+
+</div>
+
+
+<!-- SIGNAL -->
+
 <div class="card">
 
 <div id="signal" class="signal none">
-
 NO SIGNAL
-
 </div>
-
 
 <div id="reason" class="small">
-
-Waiting for SMC confirmation...
-
+Waiting for complete SMC setup...
 </div>
 
 </div>
 
+
+<!-- ENTRY / SL / TP -->
 
 <div class="card grid">
 
+<div class="metric">
+<span>Entry</span>
+<b id="entry">—</b>
+</div>
 
 <div class="metric">
-
-Entry
-
-<b id="entry">
-—
-</b>
-
+<span>Stop Loss</span>
+<b id="sl">—</b>
 </div>
-
 
 <div class="metric">
-
-Stop Loss
-
-<b id="sl">
-—
-</b>
-
+<span>TP1</span>
+<b id="tp1">—</b>
 </div>
-
 
 <div class="metric">
-
-TP1
-
-<b id="tp1">
-—
-</b>
-
+<span>TP2</span>
+<b id="tp2">—</b>
 </div>
-
 
 <div class="metric">
-
-TP2
-
-<b id="tp2">
-—
-</b>
-
+<span>R:R</span>
+<b id="rr">—</b>
 </div>
-
 
 <div class="metric">
-
-R:R
-
-<b id="rr">
-—
-</b>
+<span>Confidence</span>
+<b id="conf">—</b>
+</div>
 
 </div>
 
 
-<div class="metric">
-
-Confidence
-
-<b id="conf">
-—
-</b>
-
-</div>
-
-
-</div>
-
+<!-- CONFIRMATIONS -->
 
 <div class="card">
 
-<b>
-Confirmations
-</b>
-
+<b>SMC Confirmations</b>
 
 <ul id="checks">
 
@@ -300,7 +284,8 @@ Waiting for market history...
 
 <div class="card small">
 
-AUTO TRADE: OFF — Signal-only version. No real-money trading.
+AUTO TRADE: OFF — Signal-only.
+No API key and no real-money orders.
 
 </div>
 
@@ -309,13 +294,17 @@ AUTO TRADE: OFF — Signal-only version. No real-money trading.
 
 <script>
 
+let ws=null;
 
-let ws = null;
+let candles=[];
 
-let candles = [];
+let signal=null;
+
+let markers=[];
 
 
-const $ = id => document.getElementById(id);
+const $=id=>
+document.getElementById(id);
 
 
 
@@ -330,17 +319,15 @@ return 0;
 
 n=Math.min(n,a.length);
 
-let k=2/(n+1);
+const k=2/(n+1);
 
 let e=a[0];
-
 
 for(let i=1;i<a.length;i++){
 
 e=a[i]*k+e*(1-k);
 
 }
-
 
 return e;
 
@@ -357,16 +344,13 @@ function rsi(a,n=14){
 if(a.length<n+1)
 return 50;
 
-
 let gain=0;
 
 let loss=0;
 
-
 for(let i=a.length-n;i<a.length;i++){
 
 let d=a[i]-a[i-1];
-
 
 gain+=Math.max(d,0);
 
@@ -374,12 +358,9 @@ loss+=Math.max(-d,0);
 
 }
 
-
-if(loss===0)
-return 100;
-
-
-return 100-(100/(1+gain/loss));
+return loss===0
+?100
+:100-(100/(1+gain/loss));
 
 }
 
@@ -394,9 +375,7 @@ function atr(c,n=14){
 if(c.length<n+1)
 return 0;
 
-
 let total=0;
-
 
 for(let i=c.length-n;i<c.length;i++){
 
@@ -412,7 +391,6 @@ Math.abs(c[i].l-c[i-1].c)
 
 }
 
-
 return total/n;
 
 }
@@ -420,20 +398,76 @@ return total/n;
 
 
 /* =========================
-FORMAT PRICE
+FORMAT
 ========================= */
 
 function fmt(x){
 
 return Number(x).toLocaleString(
-
 undefined,
-
 {
 maximumFractionDigits:8
 }
-
 );
+
+}
+
+
+
+/* =========================
+SWINGS
+========================= */
+
+function findSwings(c,look=2){
+
+let highs=[];
+
+let lows=[];
+
+for(
+let i=look;
+i<c.length-look;
+i++
+){
+
+let hi=true;
+
+let lo=true;
+
+for(let j=1;j<=look;j++){
+
+if(
+c[i].h<=c[i-j].h ||
+c[i].h<c[i+j].h
+)
+hi=false;
+
+if(
+c[i].l>=c[i-j].l ||
+c[i].l>c[i+j].l
+)
+lo=false;
+
+}
+
+if(hi)
+highs.push({
+i,
+p:c[i].h
+});
+
+if(lo)
+lows.push({
+i,
+p:c[i].l
+});
+
+}
+
+return {
+highs,
+lows
+};
 
 }
 
@@ -445,82 +479,83 @@ SMC ANALYSIS
 
 function analyze(){
 
-
-if(candles.length<60){
+if(candles.length<80){
 
 $("reason").textContent=
+"Loading candles: "+
+candles.length+
+"/80";
 
-"Loading candles: "+candles.length+"/60";
+draw();
 
 return;
 
 }
 
 
-let c=candles;
+const c=candles;
+
+const n=c.length;
+
+const close=c.map(x=>x.c);
+
+const last=c[n-1];
 
 
-let closes=c.map(x=>x.c);
+const E50=
+ema(close,50);
 
+const E200=
+ema(close,200);
 
-let last=c[c.length-1];
+const RSI=
+rsi(close,14);
 
-
-let ema50=ema(closes,50);
-
-
-let ema200=ema(closes,200);
-
-
-let RSI=rsi(closes,14);
-
-
-let ATR=atr(c,14);
-
-
-
-/* =========================
-SWING LEVELS
-========================= */
-
-let recent=c.slice(-12);
-
-
-let highs=
-recent
-.slice(0,-2)
-.map(x=>x.h);
-
-
-let lows=
-recent
-.slice(0,-2)
-.map(x=>x.l);
-
-
-let swingHigh=
-Math.max(...highs);
-
-
-let swingLow=
-Math.min(...lows);
+const ATR=
+atr(c,14);
 
 
 
-/* =========================
-LIQUIDITY GRAB
-========================= */
+/* SWINGS */
 
-let liquidityGrabUp=
+const sliced=
+c.slice(-70);
 
-last.h>swingHigh &&
-last.c<swingHigh;
+const sw=
+findSwings(sliced,2);
 
 
-let liquidityGrabDown=
+const highs=
+sw.highs.map(x=>({
 
-last.l<swingLow &&
-last.c>swingLow;
+...x,
+
+i:x.i+(n-70)
+
+}));
+
+
+const lows=
+sw.lows.map(x=>({
+
+...x,
+
+i:x.i+(n-70)
+
+}));
+
+
+const lastHigh=
+highs.at(-1);
+
+const prevHigh=
+highs.at(-2);
+
+const lastLow=
+lows.at(-1);
+
+const prevLow=
+lows.at(-2);
 
 
 
@@ -528,24 +563,49 @@ last.c>swingLow;
 BOS
 ========================= */
 
-let p=
-c[c.length-2];
+let bullBOS=false;
+
+let bearBOS=false;
+
+let bullCHOCH=false;
+
+let bearCHOCH=false;
 
 
-let pp=
-c[c.length-3];
+if(lastHigh)
+bullBOS=
+last.c>lastHigh.p;
 
 
-let bullishBOS=
+if(lastLow)
+bearBOS=
+last.c<lastLow.p;
 
-last.c>p.h &&
-p.h>pp.h;
+
+if(
+prevLow &&
+lastHigh
+){
+
+bullCHOCH=
+last.c>lastHigh.p &&
+prevLow.i>
+(prevHigh?.i ?? -1);
+
+}
 
 
-let bearishBOS=
+if(
+prevHigh &&
+lastLow
+){
 
-last.c<p.l &&
-p.l<pp.l;
+bearCHOCH=
+last.c<lastLow.p &&
+prevHigh.i>
+(prevLow?.i ?? -1);
+
+}
 
 
 
@@ -553,54 +613,210 @@ p.l<pp.l;
 FVG
 ========================= */
 
-let bullishFVG=
+let bullFVG=null;
 
-c.length>=4 &&
-c[c.length-3].h<
-c[c.length-1].l;
+let bearFVG=null;
 
 
-let bearishFVG=
+for(
+let i=n-3;
+i<n;
+i++
+){
 
-c.length>=4 &&
-c[c.length-3].l>
-c[c.length-1].h;
+if(
+i>=2 &&
+c[i-2].h<c[i].l
+){
+
+bullFVG={
+
+i,
+
+low:c[i-2].h,
+
+high:c[i].l
+
+};
+
+}
+
+
+if(
+i>=2 &&
+c[i-2].l>c[i].h
+){
+
+bearFVG={
+
+i,
+
+low:c[i].h,
+
+high:c[i-2].l
+
+};
+
+}
+
+}
 
 
 
 /* =========================
-BUY SCORE
+LIQUIDITY
+========================= */
+
+let liquidityUp=null;
+
+let liquidityDown=null;
+
+
+const lookStart=
+Math.max(5,n-25);
+
+
+for(
+let i=lookStart;
+i<n-1;
+i++
+){
+
+const beforeHigh=
+Math.max(
+...c
+.slice(
+Math.max(0,i-8),
+i
+)
+.map(x=>x.h)
+);
+
+
+const beforeLow=
+Math.min(
+...c
+.slice(
+Math.max(0,i-8),
+i
+)
+.map(x=>x.l)
+);
+
+
+if(
+c[i].h>beforeHigh &&
+c[i].c<beforeHigh
+){
+
+liquidityUp={
+i,
+price:c[i].h
+};
+
+}
+
+
+if(
+c[i].l<beforeLow &&
+c[i].c>beforeLow
+){
+
+liquidityDown={
+i,
+price:c[i].l
+};
+
+}
+
+}
+
+
+
+/* RECENT LIQUIDITY */
+
+const buyLiquidity=
+liquidityDown &&
+liquidityDown.i>=n-12;
+
+
+const sellLiquidity=
+liquidityUp &&
+liquidityUp.i>=n-12;
+
+
+const buyFVG=
+bullFVG &&
+bullFVG.i>=n-10;
+
+
+const sellFVG=
+bearFVG &&
+bearFVG.i>=n-10;
+
+
+const buyStructure=
+bullBOS ||
+bullCHOCH;
+
+
+const sellStructure=
+bearBOS ||
+bearCHOCH;
+
+
+const trendBull=
+E50>E200;
+
+
+const trendBear=
+E50<E200;
+
+
+
+/* =========================
+SCORE
 ========================= */
 
 let buyScore=
 
-(liquidityGrabDown ? 2 : 0)+
+(buyLiquidity?2:0)+
 
-(bullishBOS ? 1 : 0)+
+(buyStructure?2:0)+
 
-(bullishFVG ? 2 : 0)+
+(buyFVG?2:0)+
 
-(ema50>ema200 ? 1 : 0)+
+(trendBull?1:0)+
 
-(RSI>50 ? 1 : 0);
+(RSI>50?1:0);
+
+
+let sellScore=
+
+(sellLiquidity?2:0)+
+
+(sellStructure?2:0)+
+
+(sellFVG?2:0)+
+
+(trendBear?1:0)+
+
+(RSI<50?1:0);
 
 
 
 /* =========================
-SELL SCORE
+SIGNAL
 ========================= */
 
-let sellScore=
+signal=null;
 
-(liquidityGrabUp ? 2 : 0)+
 
-(bearishBOS ? 1 : 0)+
+if(buyScore>=7)
+signal="BUY";
 
-(bearishFVG ? 2 : 0)+
-
-(ema50<ema200 ? 1 : 0)+
-
-(RSI<50 ? 1 : 0);
+else if(sellScore>=7)
+signal="SELL";
 
 
 
@@ -611,103 +827,52 @@ CONFIRMATIONS
 $("checks").innerHTML=`
 
 <li>
-
 Liquidity Grab:
-
 ${
-liquidityGrabDown ||
-liquidityGrabUp
-
-?
-
-"✅ Confirmed"
-
-:
-
-"❌ Not confirmed"
-
+buyLiquidity ||
+sellLiquidity
+?"✅ Confirmed"
+:"❌ Not confirmed"
 }
-
 </li>
 
-
 <li>
-
-BOS:
-
+Structure BOS/CHoCH:
 ${
-bullishBOS ||
-bearishBOS
-
-?
-
-"✅ Confirmed"
-
-:
-
-"❌ Not confirmed"
-
+buyStructure ||
+sellStructure
+?"✅ Confirmed"
+:"❌ Not confirmed"
 }
-
 </li>
 
-
 <li>
-
 FVG:
-
 ${
-bullishFVG ||
-bearishFVG
-
-?
-
-"✅ Confirmed"
-
-:
-
-"❌ Not confirmed"
-
+buyFVG ||
+sellFVG
+?"✅ Confirmed"
+:"❌ Not confirmed"
 }
-
 </li>
 
-
 <li>
-
 EMA 50/200:
-
 ${
-ema50>ema200
-
-?
-
-"Bullish 🟢"
-
-:
-
-"Bearish 🔴"
-
+trendBull
+?"Bullish 🟢"
+:"Bearish 🔴"
 }
-
 </li>
 
-
 <li>
-
 RSI 14:
-
 ${RSI.toFixed(1)}
-
 </li>
 
-
 <li>
-
 ATR 14:
-
 ${fmt(ATR)}
-
 </li>
 
 `;
@@ -715,150 +880,108 @@ ${fmt(ATR)}
 
 
 /* =========================
-SIGNAL
+NO SIGNAL
 ========================= */
 
-let side=null;
-
-
-if(buyScore>=6){
-
-side="BUY";
-
-}
-
-else if(sellScore>=6){
-
-side="SELL";
-
-}
-
-
-
-if(!side){
+if(!signal){
 
 $("signal").textContent=
 "NO SIGNAL";
 
-
 $("signal").className=
 "signal none";
 
-
 $("reason").textContent=
-"Waiting for complete SMC confirmation...";
+"Waiting for Liquidity + Structure + FVG confirmation...";
 
 
-$("entry").textContent="—";
-
-$("sl").textContent="—";
-
-$("tp1").textContent="—";
-
-$("tp2").textContent="—";
-
-$("rr").textContent="—";
-
-$("conf").textContent="—";
-
-
-return;
+[
+"entry",
+"sl",
+"tp1",
+"tp2",
+"rr",
+"conf"
+]
+.forEach(
+id=>
+$(id).textContent="—"
+);
 
 }
-
 
 
 /* =========================
-ENTRY / SL / TP
+SIGNAL FOUND
 ========================= */
-
-let entry=last.c;
-
-
-let risk=Math.max(
-
-ATR*1.2,
-
-entry*0.001
-
-);
-
-
-let stop;
-
-let tp1;
-
-let tp2;
-
-
-if(side==="BUY"){
-
-stop=
-entry-risk;
-
-tp1=
-entry+risk*1.5;
-
-tp2=
-entry+risk*2;
-
-}
 
 else{
 
-stop=
-entry+risk;
-
-tp1=
-entry-risk*1.5;
-
-tp2=
-entry-risk*2;
-
-}
+const entry=
+last.c;
 
 
+const risk=
+Math.max(
+ATR*1.2,
+entry*0.001
+);
 
-/* =========================
-DISPLAY
-========================= */
+
+const stop=
+signal==="BUY"
+?entry-risk
+:entry+risk;
+
+
+const tp1=
+signal==="BUY"
+?entry+risk*1.5
+:entry-risk*1.5;
+
+
+const tp2=
+signal==="BUY"
+?entry+risk*2
+:entry-risk*2;
+
 
 $("signal").textContent=
 
-side==="BUY"
+signal==="BUY"
 
-?
+?"🟢 BUY — SMC SIGNAL"
 
-"🟢 BUY — SMC SIGNAL"
-
-:
-
-"🔴 SELL — SMC SIGNAL";
+:"🔴 SELL — SMC SIGNAL";
 
 
 $("signal").className=
 
 "signal "+
-
-(side==="BUY" ? "buy" : "sell");
+(
+signal==="BUY"
+?"buy"
+:"sell"
+);
 
 
 $("reason").textContent=
 
-"Liquidity + Structure + FVG + Indicator confirmation";
+signal==="BUY"
+
+?"Liquidity Grab + BOS/CHoCH + Bullish FVG + Trend"
+
+:"Liquidity Grab + BOS/CHoCH + Bearish FVG + Trend";
 
 
 $("entry").textContent=
 fmt(entry);
 
-
 $("sl").textContent=
 fmt(stop);
 
-
 $("tp1").textContent=
 fmt(tp1);
-
 
 $("tp2").textContent=
 fmt(tp2);
@@ -868,90 +991,459 @@ $("rr").textContent=
 "1 : 1.5 / 1 : 2";
 
 
-let confidence=
+$("conf").textContent=
 
 Math.round(
-
 Math.max(
 buyScore,
 sellScore
-)/7*100
+)/8*100
+)+"%";
 
-);
+}
 
 
-$("conf").textContent=
-confidence+"%";
+
+/* MARKERS */
+
+markers=[];
+
+
+if(bullFVG)
+markers.push({
+type:"fvg",
+i:bullFVG.i,
+low:bullFVG.low,
+high:bullFVG.high
+});
+
+
+if(bearFVG)
+markers.push({
+type:"fvg",
+i:bearFVG.i,
+low:bearFVG.low,
+high:bearFVG.high
+});
+
+
+if(liquidityUp)
+markers.push({
+type:"liq",
+i:liquidityUp.i,
+p:liquidityUp.price
+});
+
+
+if(liquidityDown)
+markers.push({
+type:"liq",
+i:liquidityDown.i,
+p:liquidityDown.price
+});
+
+
+if(signal)
+markers.push({
+type:signal.toLowerCase(),
+i:n-1,
+p:last.c
+});
+
+
+draw();
 
 }
 
 
 
 /* =========================
-START BOT
+DRAW CHART
+========================= */
+
+function draw(){
+
+const canvas=
+$("chart");
+
+
+const dpr=
+window.devicePixelRatio||1;
+
+
+const w=
+canvas.clientWidth;
+
+
+const h=
+canvas.clientHeight;
+
+
+canvas.width=
+w*dpr;
+
+canvas.height=
+h*dpr;
+
+
+const ctx=
+canvas.getContext("2d");
+
+
+ctx.scale(dpr,dpr);
+
+
+ctx.clearRect(
+0,
+0,
+w,
+h
+);
+
+
+if(!candles.length)
+return;
+
+
+const data=
+candles.slice(-80);
+
+
+const min=
+Math.min(
+...data.map(x=>x.l)
+);
+
+
+const max=
+Math.max(
+...data.map(x=>x.h)
+);
+
+
+const pad=
+(max-min)*0.08||1;
+
+
+const lo=
+min-pad;
+
+
+const hi=
+max+pad;
+
+
+const xStep=
+w/data.length;
+
+
+const body=
+Math.max(
+2,
+xStep*0.58
+);
+
+
+const y=
+p=>
+h-
+(
+(p-lo)/(hi-lo)
+)*h;
+
+
+
+/* GRID */
+
+ctx.strokeStyle=
+"#16271d";
+
+ctx.lineWidth=1;
+
+
+for(
+let j=1;
+j<5;
+j++
+){
+
+let yy=
+h*j/5;
+
+ctx.beginPath();
+
+ctx.moveTo(
+0,
+yy
+);
+
+ctx.lineTo(
+w,
+yy
+);
+
+ctx.stroke();
+
+}
+
+
+
+/* CANDLES */
+
+data.forEach(
+(k,i)=>{
+
+const x=
+i*xStep+
+xStep/2;
+
+const yo=
+y(k.o);
+
+const yc=
+y(k.c);
+
+const yh=
+y(k.h);
+
+const yl=
+y(k.l);
+
+
+ctx.strokeStyle=
+k.c>=k.o
+?"#42e887"
+:"#ff6978";
+
+ctx.fillStyle=
+ctx.strokeStyle;
+
+
+ctx.beginPath();
+
+ctx.moveTo(
+x,
+yh
+);
+
+ctx.lineTo(
+x,
+yl
+);
+
+ctx.stroke();
+
+
+const top=
+Math.min(
+yo,
+yc
+);
+
+
+const bh=
+Math.max(
+1,
+Math.abs(yc-yo)
+);
+
+
+ctx.fillRect(
+x-body/2,
+top,
+body,
+bh
+);
+
+});
+
+
+
+/* MARKERS */
+
+markers.forEach(
+m=>{
+
+let idx=
+m.i-
+(
+candles.length-
+data.length
+);
+
+
+if(
+idx<0 ||
+idx>=data.length
+)
+return;
+
+
+const x=
+idx*xStep+
+xStep/2;
+
+
+if(m.type==="fvg"){
+
+ctx.fillStyle=
+"rgba(70,140,255,.16)";
+
+ctx.strokeStyle=
+"rgba(115,169,255,.6)";
+
+
+const yy=
+y(m.high);
+
+
+const hh=
+Math.max(
+2,
+y(m.low)-yy
+);
+
+
+ctx.fillRect(
+x-xStep*1.5,
+yy,
+xStep*3,
+hh
+);
+
+
+ctx.strokeRect(
+x-xStep*1.5,
+yy,
+xStep*3,
+hh
+);
+
+}
+
+
+else if(
+m.type==="liq"
+){
+
+ctx.fillStyle=
+"#ffd66b";
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y(m.p),
+5,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+
+else{
+
+ctx.fillStyle=
+m.type==="buy"
+?"#42e887"
+:"#ff6978";
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y(m.p),
+7,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+});
+
+
+const last=
+data.at(-1);
+
+
+ctx.fillStyle=
+"#dfeee4";
+
+ctx.font=
+"12px sans-serif";
+
+ctx.fillText(
+fmt(last.c),
+8,
+16
+);
+
+}
+
+
+
+/* =========================
+RESIZE
+========================= */
+
+window.addEventListener(
+"resize",
+draw
+);
+
+
+
+/* =========================
+START
 ========================= */
 
 async function start(){
 
-
 stop();
-
 
 candles=[];
 
 
-let symbol=
+const symbol=
 $("symbol").value;
 
 
-let timeframe=
+const timeframe=
 $("tf").value;
 
 
 $("status").textContent=
-
 "🟡 Loading market history...";
 
-
-
-/* =========================
-LOAD 250 HISTORICAL CANDLES
-========================= */
 
 try{
 
 
-let url=
+const r=
+await fetch(
 
-`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=250`;
+`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=250`
 
-
-let response=
-await fetch(url);
-
-
-if(!response.ok){
-
-throw new Error(
-"Binance REST request failed"
 );
 
-}
+
+if(!r.ok)
+throw new Error(
+"REST error"
+);
 
 
-let data=
-await response.json();
+const data=
+await r.json();
 
-
-/*
-
-Remove last candle because it
-may still be forming.
-
-*/
 
 candles=
-
 data
 .slice(0,-1)
 .map(k=>({
@@ -969,27 +1461,18 @@ v:+k[5]
 }));
 
 
-
 analyze();
 
 
 }
 
-catch(error){
-
+catch(e){
 
 $("status").textContent=
-
 "🔴 History Load Error";
 
-
 $("reason").textContent=
-
 "Could not load Binance historical candles.";
-
-
-console.error(error);
-
 
 return;
 
@@ -997,76 +1480,51 @@ return;
 
 
 
-/* =========================
-LIVE WEBSOCKET
-========================= */
-
-let stream=
-
-`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${timeframe}`;
-
+/* LIVE BINANCE */
 
 ws=
-new WebSocket(stream);
+new WebSocket(
 
+`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${timeframe}`
+
+);
 
 
 ws.onopen=()=>{
 
-
 $("status").textContent=
-
 "🟢 Binance Live";
-
 
 analyze();
 
 };
 
 
-
 ws.onclose=()=>{
 
-
 $("status").textContent=
-
 "⚪ Disconnected";
 
 };
 
 
-
 ws.onerror=()=>{
 
-
 $("status").textContent=
-
 "🔴 Connection Error";
 
 };
 
 
-
 ws.onmessage=e=>{
 
-
-let d=
-JSON.parse(e.data);
-
-
-let k=
-d.k;
+const k=
+JSON.parse(e.data).k;
 
 
-
-/*
-
-Only analyze CLOSED candles.
-
-*/
+/* CLOSED CANDLE ONLY */
 
 if(k.x){
-
 
 candles.push({
 
@@ -1083,11 +1541,8 @@ v:+k.v
 });
 
 
-if(candles.length>250){
-
+if(candles.length>250)
 candles.shift();
-
-}
 
 
 analyze();
@@ -1106,7 +1561,6 @@ STOP
 
 function stop(){
 
-
 if(ws){
 
 ws.close();
@@ -1115,18 +1569,14 @@ ws=null;
 
 }
 
-
 $("status").textContent=
-
 "⚪ Disconnected";
 
 }
 
 
 
-/* =========================
-AUTO START
-========================= */
+/* AUTO START */
 
 start();
 
